@@ -1,0 +1,2 @@
+jira:
+    rootUrl: 'https://gkfplc.atlassian.net/rest/api/latest/'

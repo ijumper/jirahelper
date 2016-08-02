@@ -11,75 +11,91 @@ import net.oauth.client.httpclient4.HttpClient4;
 public class oauthwrapper {
 
 
-    protected net.oauth.client.OAuthClient oAuthClient;
+    protected OAuthClient oAuthClient;
 
+    protected OAuthServiceProvider oAuthServiceProvider;
 
+    protected OAuthAccessor oAuthAccessor;
 
-    private String getRequestToken() {
+    protected OAuthConsumer oAuthConsumer;
 
+    private String getRequestToken() throws java.io.IOException, net.oauth.OAuthException, java.net.URISyntaxException {
 
-        return "the_request_token";
+        getClient();
+        getProvider();
+        getConsumer();
+        getAccessor();
+
+        oAuthClient.getRequestToken(oAuthAccessor,"GET",null);
+
     }
 
 
-    private  String getAccessToken(String requestToken) throws java.io.IOException, net.oauth.OAuthException, java.net.URISyntaxException{
+
+    /*
+        To be able to use OAuth authentication the client application has to do the "OAuth dance" with JIRA. This dance consists of three parts.
+        Obtain a request token
+        Ask the user to authorize this request token
+        Swap the request token for an access token
+
+     */
+    private  String getAccessToken(String requestToken) throws java.io.IOException, net.oauth.OAuthException, java.net.URISyntaxException {
 
 
 
-        OAuthServiceProvider provider = getProvider();
+        getClient();
+        getProvider();
+        getConsumer();
+        getAccessor();
 
-        OAuthConsumer consumer = getConsumer(provider);
+        OAuthMessage result;
 
-        consumer.setProperty(OAuth.OAUTH_SIGNATURE_METHOD, OAuth.HMAC_SHA1);
+        if (oAuthAccessor.requestToken != null){
+            getRequestToken();
 
-        OAuthClient client = getClient();
+        }
 
-        OAuthAccessor accessor = getAccessor(consumer);
 
-        accessor.requestToken = requestToken;
 
-        OAuthMessage result = client.getAccessToken(accessor,"GET",null);
+        result = oAuthClient.getAccessToken(oAuthAccessor,"GET",null);
 
         return result.getToken();
     }
 
 
-    private OAuthServiceProvider getProvider() {
+    private void getProvider() {
 
         String requestUrl = "https://www.google.com/accounts/OAuthGetRequestToken";
         String authorizeUrl = "https://www.google.com/accounts/OAuthAuthorizeToken";
         String accessUrl = "https://www.google.com/accounts/OAuthGetAccessToken";
 
-        OAuthServiceProvider provider = new OAuthServiceProvider(requestUrl, authorizeUrl, accessUrl);
+        oAuthServiceProvider = new OAuthServiceProvider(requestUrl, authorizeUrl, accessUrl);
 
-        return provider;
     }
 
-    private OAuthConsumer getConsumer(OAuthServiceProvider provider) {
+    private void getConsumer() {
 
 
         String consumerKey = ""; //TODO get the consumer key from a secure location
         String consumerSecret = "";
         String callbackUrl = "XXXXX";
 
-        OAuthConsumer consumer = new OAuthConsumer(callbackUrl, consumerKey, consumerSecret, provider);
+        oAuthConsumer = new OAuthConsumer(callbackUrl, consumerKey, consumerSecret, oAuthServiceProvider);
 
-        return consumer;
+        oAuthConsumer.setProperty(OAuth.OAUTH_SIGNATURE_METHOD, OAuth.HMAC_SHA1);
 
     }
 
-    private OAuthClient getClient() {
+    private  void getClient() {
 
-        OAuthClient client = new OAuthClient(new HttpClient4());
+         oAuthClient = new OAuthClient(new HttpClient4());
 
-        return client;
+
     }
 
-    private OAuthAccessor getAccessor(OAuthConsumer consumer) {
+    private void getAccessor() {
 
-        OAuthAccessor accessor = new OAuthAccessor(consumer);
-
-        return accessor;
+        oAuthAccessor = new OAuthAccessor(oAuthConsumer);
 
     }
 }

@@ -8,18 +8,20 @@ import net.oauth.OAuthServiceProvider;
 import net.oauth.client.OAuthClient;
 import net.oauth.client.httpclient4.HttpClient4;
 
+import java.util.List;
+
 public class oauthwrapper {
 
 
-    protected OAuthClient oAuthClient;
+    private OAuthClient oAuthClient;
 
-    protected OAuthServiceProvider oAuthServiceProvider;
+    private OAuthServiceProvider oAuthServiceProvider;
 
-    protected OAuthAccessor oAuthAccessor;
+    private OAuthAccessor oAuthAccessor;
 
-    protected OAuthConsumer oAuthConsumer;
+    private OAuthConsumer oAuthConsumer;
 
-    private String getRequestToken() throws java.io.IOException, net.oauth.OAuthException, java.net.URISyntaxException {
+    private void getRequestToken() throws java.io.IOException, net.oauth.OAuthException, java.net.URISyntaxException {
 
         getClient();
         getProvider();
@@ -27,6 +29,7 @@ public class oauthwrapper {
         getAccessor();
 
         oAuthClient.getRequestToken(oAuthAccessor,"GET",null);
+
 
     }
 
@@ -39,7 +42,7 @@ public class oauthwrapper {
         Swap the request token for an access token
 
      */
-    private  String getAccessToken(String requestToken) throws java.io.IOException, net.oauth.OAuthException, java.net.URISyntaxException {
+    private  void getAccessToken(String requestToken) throws java.io.IOException, net.oauth.OAuthException, java.net.URISyntaxException {
 
 
 
@@ -55,11 +58,9 @@ public class oauthwrapper {
 
         }
 
-
-
         result = oAuthClient.getAccessToken(oAuthAccessor,"GET",null);
 
-        return result.getToken();
+        result.getToken();
     }
 
 

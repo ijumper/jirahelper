@@ -1,2 +1,6 @@
 jira:
-    rootUrl: 'https://gkfplc.atlassian.net/rest/api/latest/'
+    rootUrl: https://gkfplc.atlassian.net/rest/api/latest/
+oauthurls:
+    requestUrl: /plugins/servlet/oauth/request-token
+    authorizeUrl: /plugins/servlet/oauth/authorize
+    accessUrl: /plugins/servlet/oauth/access-token

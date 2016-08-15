@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: net.oauth.core:oauth:20090531">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.oauth.core/oauth/20090531/5ce1d4307c477158a5d09b09460187752305cf9e/oauth-20090531.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.oauth.core/oauth/20090531/15fa4bc5817b0ca1c125d090194468120f9c8f9e/oauth-20090531-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
